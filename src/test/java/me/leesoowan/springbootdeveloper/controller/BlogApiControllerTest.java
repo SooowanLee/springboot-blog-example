@@ -3,6 +3,7 @@ package me.leesoowan.springbootdeveloper.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.leesoowan.springbootdeveloper.domain.Article;
 import me.leesoowan.springbootdeveloper.dto.AddArticleRequest;
+import me.leesoowan.springbootdeveloper.dto.UpdateArticleRequest;
 import me.leesoowan.springbootdeveloper.repository.BlogRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -122,7 +123,7 @@ class BlogApiControllerTest {
 
     @DisplayName("deleteArticle: 블로그 글 삭제에 성공한다.")
     @Test
-    void deleteArticle()throws Exception {
+    void deleteArticle() throws Exception {
         //given
         final String url = "/api/articles/{id}";
         final String title = "title";
@@ -139,5 +140,38 @@ class BlogApiControllerTest {
         //then
         List<Article> articles = blogRepository.findAll();
         assertThat(articles).isEmpty();
+    }
+
+    @DisplayName("updateArticle: 블로그 글 수정에 성곤한다.")
+    @Test
+    void updateArticle() throws Exception {
+        //given
+        final String url = "/api/articles/{id}";
+        final String title = "title";
+        final String content = "content";
+
+        Article savedArticle = blogRepository.save(Article.builder()
+                .title(title)
+                .content(content)
+                .build());
+
+        final String newTitle = "new title";
+        final String newContent = "new content";
+
+        UpdateArticleRequest request = new UpdateArticleRequest(newTitle, newContent);
+
+        //when
+        ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(request)));
+
+        //then
+        result.andExpect(status().isOk());
+
+        Article article = blogRepository.findById(savedArticle.getId()).get();
+
+        assertThat(article.getTitle()).isEqualTo(newTitle);
+        assertThat(article.getContent()).isEqualTo(newContent);
+
     }
 }

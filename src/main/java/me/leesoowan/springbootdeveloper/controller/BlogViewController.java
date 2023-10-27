@@ -1,12 +1,15 @@
 package me.leesoowan.springbootdeveloper.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.leesoowan.springbootdeveloper.domain.Article;
 import me.leesoowan.springbootdeveloper.dto.ArticleListViewResponse;
+import me.leesoowan.springbootdeveloper.dto.ArticleViewResponse;
 import me.leesoowan.springbootdeveloper.repository.BlogRepository;
 import me.leesoowan.springbootdeveloper.service.BlogService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -25,7 +28,14 @@ public class BlogViewController {
 
         model.addAttribute("articles", articles); //블로그 글 리스트 저장
 
-        return "articleList"; //articleList.html
-        // 라는 뷰 조회
+        return "articleList"; //articleList.html라는 뷰 조회
+    }
+
+    @GetMapping("/articles/{id}")
+    public String getArticle(@PathVariable long id, Model model) {
+        Article article = blogService.findById(id);
+        model.addAttribute("article", new ArticleViewResponse(article));
+
+        return "article";
     }
 }

@@ -142,7 +142,7 @@ class BlogApiControllerTest {
         assertThat(articles).isEmpty();
     }
 
-    @DisplayName("updateArticle: 블로그 글 수정에 성곤한다.")
+    @DisplayName("updateArticle: 블로그 글 수정에 성공한다.")
     @Test
     void updateArticle() throws Exception {
         //given
@@ -172,6 +172,5 @@ class BlogApiControllerTest {
 
         assertThat(article.getTitle()).isEqualTo(newTitle);
         assertThat(article.getContent()).isEqualTo(newContent);
-
     }
 }

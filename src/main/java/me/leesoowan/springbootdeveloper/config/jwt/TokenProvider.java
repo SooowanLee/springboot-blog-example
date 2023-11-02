@@ -44,7 +44,7 @@ public class TokenProvider {
     }
 
     //2. JWT 토큰 유효성 검증 메서드
-    private boolean validToken(String token) {
+    public boolean validToken(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(jwtProperties.getSecretKey()) //비밀값으로 복호화
@@ -56,7 +56,7 @@ public class TokenProvider {
     }
 
     //3. 토큰 기반으로 인증 정보를 가져오는 메서드
-    private Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
         Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 

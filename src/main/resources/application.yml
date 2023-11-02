@@ -16,3 +16,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+  jwt:
+    issuer: lsy9406@gmail.com
+    secret_key: study-springboot

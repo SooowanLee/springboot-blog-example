@@ -1,2 +1,10 @@
-package me.leesoowan.springbootdeveloper.dto;public class CreateAccessTokenResponse {
+package me.leesoowan.springbootdeveloper.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class CreateAccessTokenResponse {
+    private String accessToken;
 }

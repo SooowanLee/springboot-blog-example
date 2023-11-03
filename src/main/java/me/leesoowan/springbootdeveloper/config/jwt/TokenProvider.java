@@ -36,7 +36,7 @@ public class TokenProvider {
                 //내용 iss : test1234@gmail.com(properties에서 설정한 값)
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)               // iat : 현재 시간
-                .setExpiration(expiry)          // exp: expiry 멤버 변숫값
+                .setExpiration(expiry)          // exp: 만료 시간
                 .setSubject(user.getEmail())    // sub: 유저의 이메일
                 .claim("id", user.getId())// 클레임 id: 유저 ID
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())

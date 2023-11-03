@@ -1,2 +1,27 @@
-package me.leesoowan.springbootdeveloper.controller;public class TokenApiController {
+package me.leesoowan.springbootdeveloper.controller;
+
+import lombok.RequiredArgsConstructor;
+import me.leesoowan.springbootdeveloper.dto.CreateAccessTokenRequest;
+import me.leesoowan.springbootdeveloper.dto.CreateAccessTokenResponse;
+import me.leesoowan.springbootdeveloper.service.TokenService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class TokenApiController {
+
+    private final TokenService tokenService;
+
+    @PostMapping("/api/token")
+    public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken
+            (@RequestBody CreateAccessTokenRequest request) throws IllegalAccessException {
+        String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new CreateAccessTokenResponse(newAccessToken));
+    }
 }

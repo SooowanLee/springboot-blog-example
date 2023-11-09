@@ -1,3 +1,4 @@
+//로컬 스토리지에 token 저장
 const token = searchParam('token');
 
 if (token) {

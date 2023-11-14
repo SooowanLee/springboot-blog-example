@@ -14,8 +14,8 @@ import java.util.List;
 
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 @Getter
+@Entity
 public class User implements UserDetails { //UserDetails를 상속받아 인증 객체로 사용
 
     @Id
@@ -26,7 +26,7 @@ public class User implements UserDetails { //UserDetails를 상속받아 인증 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "nickname", unique = true)
@@ -56,7 +56,6 @@ public class User implements UserDetails { //UserDetails를 상속받아 인증 
     public String getUsername() {
         return email;
     }
-
 
     //사용자의 패스워드를 반환
     @Override

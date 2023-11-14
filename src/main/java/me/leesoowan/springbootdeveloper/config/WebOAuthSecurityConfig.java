@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,6 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class WebOAuthSecurityConfig {
 
@@ -34,7 +36,9 @@ public class WebOAuthSecurityConfig {
     public WebSecurityCustomizer configure() { //스프링 시큐리티 기능 비활성화
         return (web) -> web.ignoring()
                 .requestMatchers(toH2Console())
-                .requestMatchers("/img/**", "/css/**", "/js/**");
+                .requestMatchers(new AntPathRequestMatcher("/img/**"))
+                .requestMatchers(new AntPathRequestMatcher("/css/**"))
+                .requestMatchers(new AntPathRequestMatcher("/js/**"));
     }
 
     @Bean
@@ -61,18 +65,17 @@ public class WebOAuthSecurityConfig {
         );
 
         http.oauth2Login(
-                oauth2Login -> oauth2Login.
-                        loginPage("/login")
+                (oauth2) -> oauth2
+                        .loginPage("/login")
                         .authorizationEndpoint(
                                 //4. Authorization 요청과 관련된 상태 저장
-                                authorizationEndpoint -> authorizationEndpoint
+                                (authorizationEndpoint) -> authorizationEndpoint
                                         .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
                         ).successHandler(oAuth2SuccessHandler()) //5. 인증 성공 시 실행할 핸들러
                         .userInfoEndpoint(
-                                userInfoEndpoint -> userInfoEndpoint
+                                (userInfoEndpoint) -> userInfoEndpoint
                                         .userService(oAuth2UserCustomService)));
-
-        http.logout(logout -> logout.logoutSuccessUrl("/login"));
+        http.logout((logout) -> logout.logoutSuccessUrl("/login"));
 
         //6. /api로 시작하는 url인 경우 401 상태 코드를 반환하도록 예외 처리
         http.exceptionHandling(
